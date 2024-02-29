@@ -1,0 +1,4 @@
+﻿Bu katman uygulamalarda nadiren görülür.
+Nadir uygulanmasının sebebi webapi katmanı Dependency Injection yaptığımız, middleware'lerin olduğu katman olduğu için
+tüm katmanların referans'ını almak zorunda kalır. Persistance katmanı controller'ları ayrı bir katmanda yönetilecek katmandır.
+Webapi sadece gerekli konfigurasyonları,optimizasyonları yapacaktır.

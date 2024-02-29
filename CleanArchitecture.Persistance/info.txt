@@ -1,0 +1,2 @@
+﻿db işlemlerinin tümü db context dahil,
+repository pattern'ler(class'lar)

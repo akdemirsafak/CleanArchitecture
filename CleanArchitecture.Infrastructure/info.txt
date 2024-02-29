@@ -1,0 +1,1 @@
+﻿db işlemleri hariç yapılması gereken service işleri burada yapılır. Örneğin jwt üretmek, excel oluşturma, auth işlemlerinde kontrol, rabbitmq, mail gönderme işlemleri
