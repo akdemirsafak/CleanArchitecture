@@ -1,8 +1,11 @@
 ﻿using CleanArchitecture.Application;
+using CleanArchitecture.Application.Behaivors;
 using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Services;
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,12 +22,18 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionSt
 builder.Services.AddMediatR(cfr =>
     cfr.RegisterServicesFromAssembly(typeof(CleanArchitecture.Application.ApplicationAssemblyReference).Assembly));
 
+builder.Services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
+//builder.Services.AddValidatorsFromAssemblyContaining(typeof(ApplicationAssemblyReference));
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
+
 builder.Services.AddScoped<ICarService, CarService>();
 
 builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.PersistanceAssemblyReference).Assembly);
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
+
 
 
 
