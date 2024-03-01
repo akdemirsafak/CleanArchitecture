@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Persistance.Context;
+﻿using CleanArchitecture.Application;
+using CleanArchitecture.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 string connectionString= builder.Configuration.GetConnectionString("DefaultConnection")!;
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly)); //Cqrs pattern Application katmanında kullanacağı için bu katmanın assembly referansı verildi.
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
