@@ -1,3 +1,3 @@
 ﻿namespace CleanArchitecture.Domain.Dtos;
 
-public sealed class MessageResponse(string Message);
+public sealed record MessageResponse(string Message);
