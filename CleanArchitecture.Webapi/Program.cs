@@ -4,21 +4,20 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers()
-    .AddApplicationPart(typeof(CleanArchitecture.Presentation.AssemblyReference).Assembly); //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
-
 
 
 string connectionString= builder.Configuration.GetConnectionString("DefaultConnection")!;
-builder.Services.AddDbContext<AppDbContext>(options =>
-options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionString));
+
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
+
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
 
 
 if (app.Environment.IsDevelopment())
