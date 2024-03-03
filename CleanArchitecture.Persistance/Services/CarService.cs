@@ -2,26 +2,34 @@
 using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
-using CleanArchitecture.Persistance.Context;
+using CleanArchitecture.Domain.Repositories;
+using CleanArchitecture.Domain.UnitOfWorks;
 
 namespace CleanArchitecture.Persistance.Services;
 
 public sealed class CarService : ICarService
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IGenericRepository<Car> _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public CarService(AppDbContext dbContext, IMapper mapper)
+    public CarService(IGenericRepository<Car> repository, IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _dbContext = dbContext;
+        _repository = repository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task CreateAsync(CreateCarCommand command, CancellationToken cancellationToken)
     {
         Car car=_mapper.Map<Car>(command);
-        //await _dbContext.Set<Car>().AddAsync(car,cancellationToken);
-        await _dbContext.AddAsync(car,cancellationToken);
-        await _dbContext.SaveChangesAsync();
+
+        await _repository.CreateAsync(car);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<List<Car>> GetAllAsync()
+    {
+        return await _repository.GetAllAsync();
     }
 }

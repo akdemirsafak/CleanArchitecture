@@ -1,8 +1,12 @@
 ﻿using CleanArchitecture.Application;
 using CleanArchitecture.Application.Behaivors;
 using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Repositories;
+using CleanArchitecture.Domain.UnitOfWorks;
 using CleanArchitecture.Persistance.Context;
+using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
+using CleanArchitecture.Persistance.UnitOfWorks;
 using CleanArchitecture.Webapi.Middlewares;
 using FluentValidation;
 using MediatR;
@@ -30,6 +34,9 @@ builder.Services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<ICarService, CarService>();
+
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 
 builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.PersistanceAssemblyReference).Assembly);
 
