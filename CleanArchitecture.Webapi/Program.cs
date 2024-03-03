@@ -1,9 +1,9 @@
 ﻿using CleanArchitecture.Application;
 using CleanArchitecture.Application.Behaivors;
-using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Persistance.Context;
 using CleanArchitecture.Persistance.Services;
+using CleanArchitecture.Webapi.Middlewares;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connectionSt
 
 //builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(CreateCarCommand))); //Cqrs pattern Application katmanında kullanacağı için bu katmanın assembly referansı verildi.
 
+
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 builder.Services.AddMediatR(cfr =>
     cfr.RegisterServicesFromAssembly(typeof(CleanArchitecture.Application.ApplicationAssemblyReference).Assembly));
@@ -48,6 +50,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+//app.UseMiddleware<ErrorMiddleware>();
+
+app.UseMiddlewareExtensions();
 
 app.UseHttpsRedirection();
 
