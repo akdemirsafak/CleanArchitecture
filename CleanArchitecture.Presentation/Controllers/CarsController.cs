@@ -27,6 +27,6 @@ public class CarsController : ApiController
     [HttpPost("[action]")]
     public async Task<IActionResult> GetList(GetCarListQuery request)
     {
-        return Ok(await _mediator.Send(new GetCarListQuery()));
+        return Ok(await _mediator.Send(request));
     }
 }

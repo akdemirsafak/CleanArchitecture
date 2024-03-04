@@ -36,9 +36,12 @@ public sealed class CarService : ICarService
         return await _repository.GetAllAsync();
     }
 
-    public async Task<GetCarListResponse> GetListAsync(int page = 1, int pageSize = 10)
+    public async Task<GetCarListResponse> GetListAsync(int page=1, int pageSize=10, string searchText=null)
     {
         var queryable=_repository.GetList();
+        if (!String.IsNullOrEmpty(searchText))
+            queryable=queryable.Where(x => x.Name.ToLower() == searchText.ToLower());
+
         var paginated= Paginate<Car>.ToPagedList(queryable, page, pageSize);
         return _mapper.Map<GetCarListResponse>(paginated);
     }

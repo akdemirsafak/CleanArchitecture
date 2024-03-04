@@ -9,6 +9,6 @@ public interface ICarService
 {
     Task CreateAsync(CreateCarCommand command, CancellationToken cancellationToken);
     Task<IList<Car>> GetAllAsync();
-    Task<GetCarListResponse> GetListAsync(int page = 1, int pageSize=10);
+    Task<GetCarListResponse> GetListAsync(int page, int pageSize, string searchText);
 
 }

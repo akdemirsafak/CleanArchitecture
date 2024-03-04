@@ -14,7 +14,7 @@ public sealed class GetCarListQueryHandler : IRequestHandler<GetCarListQuery, Ge
 
     public async Task<GetCarListResponse> Handle(GetCarListQuery request, CancellationToken cancellationToken)
     {
-       return await _carService.GetListAsync(request.PageNumber,request.PageSize);
+       return await _carService.GetListAsync(request.PageNumber,request.PageSize,request.searchText);
     }
 }
 
