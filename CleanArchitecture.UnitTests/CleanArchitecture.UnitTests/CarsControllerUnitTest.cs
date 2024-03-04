@@ -14,7 +14,7 @@ public class CarsControllerUnitTest
     {
         //Arrange
         var mediatorMock= new Mock<IMediator>();
-        CreateCarCommand createCarCommand=new CreateCarCommand("Toyota","Corolla",300);
+        CreateCarCommand createCarCommand=new CreateCarCommand("Toyota","Corolla",300,500);
         MessageResponse messageResponse=new("Araç başarıyla kaydedildi.");
         CancellationToken cancellationToken=new();
         mediatorMock.Setup(m => m.Send(createCarCommand, cancellationToken))
