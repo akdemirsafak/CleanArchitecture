@@ -25,7 +25,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         deletedEntity.State= EntityState.Deleted;
     }
 
-    public async Task<List<T>> GetAllAsync()
+    public async Task<IList<T>> GetAllAsync()
     {
         return await _dbSet.ToListAsync();
     }
@@ -33,6 +33,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<T> GetByIdAsync(int id)
     {
         return await _dbSet.FindAsync(id);
+    }
+
+    public IQueryable<T> GetList()
+    {
+        //return (filter == null ?
+        //            _dbSet.Skip((page-1)*pageSize).Take(pageSize) :
+        //            _dbSet.Where(filter).Skip((page-1)*pageSize).Take(pageSize)).AsQueryable();
+
+        return _dbSet.AsNoTracking();
     }
 
     public async Task UpdateAsync(T entity)

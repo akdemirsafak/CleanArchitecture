@@ -4,7 +4,7 @@ using MediatR;
 
 namespace CleanArchitecture.Application.Features.CarFeatures.Queries.GetAll;
 
-public sealed class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, List<Car>>
+public sealed class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, IList<Car>>
 {
     private readonly ICarService _carService;
 
@@ -13,9 +13,9 @@ public sealed class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, List<Car
         _carService = carService;
     }
 
-    public async Task<List<Car>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
+    public async Task<IList<Car>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
     {
-        var cars= await _carService.GetAllAsync();
+        IList<Car> cars= await _carService.GetAllAsync();
         return cars;
     }
 }

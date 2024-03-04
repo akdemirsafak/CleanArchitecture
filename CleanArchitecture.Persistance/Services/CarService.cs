@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
+using CleanArchitecture.Application.Features.CarFeatures.Queries.GetList;
+using CleanArchitecture.Application.Helpers;
 using CleanArchitecture.Application.Services;
+using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Domain.UnitOfWorks;
@@ -28,8 +31,15 @@ public sealed class CarService : ICarService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<Car>> GetAllAsync()
+    public async Task<IList<Car>> GetAllAsync()
     {
         return await _repository.GetAllAsync();
+    }
+
+    public async Task<GetCarListResponse> GetListAsync(int page = 1, int pageSize = 10)
+    {
+        var queryable=_repository.GetList();
+        var paginated= Paginate<Car>.ToPagedList(queryable, page, pageSize);
+        return _mapper.Map<GetCarListResponse>(paginated);
     }
 }

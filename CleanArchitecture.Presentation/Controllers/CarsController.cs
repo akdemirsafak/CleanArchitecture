@@ -1,5 +1,6 @@
 ﻿using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Application.Features.CarFeatures.Queries.GetAll;
+using CleanArchitecture.Application.Features.CarFeatures.Queries.GetList;
 using CleanArchitecture.Presentation.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +23,10 @@ public class CarsController : ApiController
     {
         var messageResponse=await _mediator.Send(new GetCarsQuery());
         return Ok(messageResponse);
+    }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> GetList(GetCarListQuery request)
+    {
+        return Ok(await _mediator.Send(new GetCarListQuery()));
     }
 }
