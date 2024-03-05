@@ -7,15 +7,19 @@ namespace CleanArchitecture.Application.Features.Auth.Commands.Register;
 public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, MessageResponse>
 {
     private readonly IAuthService _authService;
+    private readonly IMailService _mailService;
 
-    public RegisterCommandHandler(IAuthService authService)
+    public RegisterCommandHandler(IAuthService authService, IMailService mailService)
     {
         _authService = authService;
+        _mailService = mailService;
     }
 
     public async Task<MessageResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        await _authService.RegisterAsync(request);
+        var user=await _authService.RegisterAsync(request);
+        var sendMailModel=new SendMailDto(user.Email,"Aramıza Hoşgeldin.","Burası body kısmı");
+        await _mailService.SendAsync(sendMailModel);
         return new("Kullanıcı başarıyla kaydedildi.");
     }
 }

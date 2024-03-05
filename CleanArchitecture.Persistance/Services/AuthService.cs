@@ -14,7 +14,7 @@ public class AuthService : IAuthService
         _userManager = userManager;
     }
 
-    public async Task RegisterAsync(RegisterCommand command)
+    public async Task<AppUser> RegisterAsync(RegisterCommand command)
     {
         AppUser user=new AppUser
         {
@@ -24,5 +24,6 @@ public class AuthService : IAuthService
         IdentityResult createResult= await _userManager.CreateAsync(user,command.Password);
         if (!createResult.Succeeded)
             throw new Exception(createResult.Errors.First().Description);
+        return user;
     }
 }
