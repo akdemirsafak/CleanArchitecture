@@ -11,6 +11,7 @@ using CleanArchitecture.Persistance.Repositories;
 using CleanArchitecture.Persistance.Services;
 using CleanArchitecture.Persistance.UnitOfWorks;
 using CleanArchitecture.Webapi.Middlewares;
+using CleanArchitecture.Webapi.OptionsSetup;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -47,9 +48,11 @@ var emailConfig = builder.Configuration
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 
-
+builder.Services.AddAuthentication().AddJwtBearer(); //Burada araya girip yaptığımız ayarları JwtBearerOptionsSetup'da yapıyoruz.
 
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
