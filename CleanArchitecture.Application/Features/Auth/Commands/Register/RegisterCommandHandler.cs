@@ -19,7 +19,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Me
     {
         var user=await _authService.RegisterAsync(request);
         var sendMailModel=new SendMailDto(user.Email,"Aramıza Hoşgeldin.","Burası body kısmı");
-        await _mailService.SendAsync(sendMailModel);
+        //await _mailService.SendAsync(sendMailModel);
         return new("Kullanıcı başarıyla kaydedildi.");
     }
 }
