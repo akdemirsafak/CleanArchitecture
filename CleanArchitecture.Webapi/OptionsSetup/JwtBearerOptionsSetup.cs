@@ -17,15 +17,24 @@ public sealed class JwtBearerOptionsSetup : IPostConfigureOptions<JwtBearerOptio
 
     public void PostConfigure(string? name, JwtBearerOptions options)
     {
-        options.TokenValidationParameters=new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer=true, //Issuer kontrol edilsin mi
-            ValidateAudience=true,
-            ValidateLifetime=true,
-            ValidIssuer=_jwtOptions.Issuer,
-            ValidAudiences=_jwtOptions.Audiences,
-            ValidateIssuerSigningKey=true,
-            IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey))
+
+            ValidateIssuer = true, //Issuer kontrol edilsin mi
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = _jwtOptions.Issuer,
+            ValidAudiences = _jwtOptions.Audiences,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey))
         };
+        //options.TokenValidationParameters.ValidateIssuer = true; //Issuer kontrol edilsin mi
+        //options.TokenValidationParameters.ValidateAudience = true;
+        //options.TokenValidationParameters.ValidateLifetime = true;
+        //options.TokenValidationParameters.ValidIssuer = _jwtOptions.Issuer;
+        //options.TokenValidationParameters.ValidAudiences = _jwtOptions.Audiences;
+        //options.TokenValidationParameters.ValidateIssuerSigningKey = true;
+        //options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
+
     }
 }

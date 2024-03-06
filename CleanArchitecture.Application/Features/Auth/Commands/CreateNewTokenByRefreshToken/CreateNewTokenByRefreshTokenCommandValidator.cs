@@ -6,10 +6,6 @@ public sealed class CreateNewTokenByRefreshTokenCommandValidator : AbstractValid
 {
     public CreateNewTokenByRefreshTokenCommandValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotNull().WithMessage("{PropertyName} boş olamaz.")
-            .NotEmpty().WithMessage("{PropertyName} boş olamaz.");
-
         RuleFor(x => x.RefreshToken)
             .NotNull().WithMessage("{PropertyName} boş olamaz.")
             .NotEmpty().WithMessage("{PropertyName} boş olamaz.");

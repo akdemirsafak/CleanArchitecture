@@ -29,17 +29,18 @@ public sealed class JwtProvider : IJwtProvider
     {
         SymmetricSecurityKey securityKey = new (Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
 
-        var claims=new Claim[]{
+        var claims=new List<Claim>{
             new(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email,user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+        claims.AddRange(_jwtOptions.Audiences.Select(audience=> new Claim(JwtRegisteredClaimNames.Aud,audience)));
 
         DateTime accessTokenExpiration = DateTime.Now.AddHours(1);
 
         JwtSecurityToken jwtSecurityToken= new (
             _jwtOptions.Issuer,
-            //_jwtOptions.Audiences[0],
+            //_jwtOptions.Audiences[0], 1 taneden fazla olduğu için claim'lere ekledim.
             claims:claims,
             notBefore:DateTime.Now,
             expires:accessTokenExpiration,

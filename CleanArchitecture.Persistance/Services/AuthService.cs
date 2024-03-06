@@ -1,11 +1,14 @@
-﻿using CleanArchitecture.Application.Abstraction;
+﻿using Azure.Core;
+using CleanArchitecture.Application.Abstraction;
 using CleanArchitecture.Application.Features.Auth.Commands.CreateNewTokenByRefreshToken;
 using CleanArchitecture.Application.Features.Auth.Commands.Login;
 using CleanArchitecture.Application.Features.Auth.Commands.Register;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace CleanArchitecture.Persistance.Services;
 
@@ -13,6 +16,7 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IJwtProvider _jwtProvider;
+    private IHttpContextAccessor _httpContextAccessor;
 
     public AuthService(UserManager<AppUser> userManager,
         IJwtProvider jwtProvider)
@@ -23,7 +27,9 @@ public class AuthService : IAuthService
 
     public async Task<TokenResponse> CreateTokenByRefreshTokenAsync(CreateNewTokenByRefreshTokenCommand command)
     {
-        AppUser user= await _userManager.FindByIdAsync(command.UserId);
+
+        var userId= _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        AppUser user= await _userManager.FindByIdAsync(userId);
         if (user == null)
             throw new Exception("User not found.");
 
