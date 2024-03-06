@@ -57,7 +57,7 @@ builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 
 builder.Services.AddAuthentication().AddJwtBearer(); //Burada araya girip yaptığımız ayarları JwtBearerOptionsSetup'da yapıyoruz.
-
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
@@ -91,7 +91,7 @@ app.UseMiddlewareExtensions();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization(); Yukarıda builder.Services.AddAuthorization() yazmamız yeterli artık bu middleware i kullanmayabiliriz.
 
 app.MapControllers();
 

@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Features.Auth.Commands.Login;
 using CleanArchitecture.Application.Features.Auth.Commands.Register;
 using CleanArchitecture.Presentation.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Presentation.Controllers;
@@ -12,11 +13,13 @@ public class AuthController : ApiController
     public AuthController(IMediator mediator) : base(mediator)
     {
     }
+    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> Register(RegisterCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
+    [AllowAnonymous]
     [HttpPost("[action]")]
     public async Task<IActionResult> Login(LoginCommand command,CancellationToken cancellationToken)
     {

@@ -3,6 +3,7 @@ using CleanArchitecture.Application.Features.CarFeatures.Queries.GetAll;
 using CleanArchitecture.Application.Features.CarFeatures.Queries.GetList;
 using CleanArchitecture.Presentation.Abstraction;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Presentation.Controllers;
@@ -18,6 +19,7 @@ public class CarsController : ApiController
         var messageResponse=await _mediator.Send(request, cancellationToken);
         return Ok(messageResponse);
     }
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
