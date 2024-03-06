@@ -15,4 +15,9 @@
     <ProjectReference Include="..\CleanArchitecture.Domain\CleanArchitecture.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Roles\Queries\" />
+    <Folder Include="Features\Users\Queries\" />
+  </ItemGroup>
+
 </Project>

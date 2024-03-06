@@ -47,6 +47,10 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddScoped<IMailService, MailService>();
 
 builder.Services.AddHttpContextAccessor();
@@ -68,7 +72,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository
 
 builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.PersistanceAssemblyReference).Assembly);
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers()
