@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Abstraction;
+using CleanArchitecture.Domain.Dtos;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Infrastructure.Options.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -13,14 +14,17 @@ namespace CleanArchitecture.Infrastructure.Authentication;
 
 public sealed class JwtProvider : IJwtProvider
 {
+    private readonly UserManager<AppUser> _userManager;
     private readonly JwtOptions _jwtOptions;
 
-    public JwtProvider(IOptions<JwtOptions> jwtOptions)
+    public JwtProvider(IOptions<JwtOptions> jwtOptions,
+        UserManager<AppUser> userManager)
     {
         _jwtOptions = jwtOptions.Value;
+        _userManager = userManager;
     }
 
-    public string CreateTokenAsync(AppUser user)
+    public async Task<TokenResponse> CreateTokenAsync(AppUser user)
     {
         SymmetricSecurityKey securityKey = new (Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
 
@@ -29,15 +33,27 @@ public sealed class JwtProvider : IJwtProvider
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
+        DateTime accessTokenExpiration = DateTime.UtcNow.AddHours(1);
+
         JwtSecurityToken jwtSecurityToken= new (
             _jwtOptions.Issuer,
             //_jwtOptions.Audiences[0],
             claims:claims,
             notBefore:DateTime.Now,
-            expires:DateTime.Now.AddHours(1),
+            expires:accessTokenExpiration,
             signingCredentials:new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256Signature)
             );
+
+
+        string refreshToken= Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+        DateTime refreshTokenExpiration = accessTokenExpiration.AddMinutes(15);
+
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiration = refreshTokenExpiration;
+        await _userManager.UpdateAsync(user);
         string token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        return token;
+
+        var tokenResponse=new TokenResponse(token,accessTokenExpiration,refreshToken,refreshTokenExpiration);
+        return tokenResponse;
     }
 }
