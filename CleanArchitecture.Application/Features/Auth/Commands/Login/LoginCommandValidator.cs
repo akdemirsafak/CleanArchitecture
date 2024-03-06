@@ -16,7 +16,7 @@ public sealed class LoginCommandValidator:AbstractValidator<LoginCommand>
             .NotEmpty().WithMessage("Lütfen şifrenizi giriniz.");
         
         RuleFor(x => x.Password)
-            .Matches("[A-Z]").WithMessage("Şifre adı en az 1 adet büyük harf içermelidir.");
+            .Matches("[A-Z]").WithMessage("Şifre en az 1 adet büyük harf içermelidir.");
         
         RuleFor(x => x.Password)
             .Matches("[a-z]").WithMessage("Şifre en az 1 adet küçük harf içermelidir.");
