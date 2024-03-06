@@ -30,6 +30,7 @@ public sealed class JwtProvider : IJwtProvider
         SymmetricSecurityKey securityKey = new (Encoding.UTF8.GetBytes(_jwtOptions.SecurityKey));
 
         var claims=new Claim[]{
+            new(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email,user.Email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };

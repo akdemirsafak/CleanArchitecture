@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Abstraction;
+using CleanArchitecture.Application.Features.Auth.Commands.CreateNewTokenByRefreshToken;
 using CleanArchitecture.Application.Features.Auth.Commands.Login;
 using CleanArchitecture.Application.Features.Auth.Commands.Register;
 using CleanArchitecture.Application.Services;
@@ -18,6 +19,22 @@ public class AuthService : IAuthService
     {
         _userManager = userManager;
         _jwtProvider = jwtProvider;
+    }
+
+    public async Task<TokenResponse> CreateTokenByRefreshTokenAsync(CreateNewTokenByRefreshTokenCommand command)
+    {
+        AppUser user= await _userManager.FindByIdAsync(command.UserId);
+        if (user == null)
+            throw new Exception("User not found.");
+
+        if (user.RefreshToken != command.RefreshToken)
+            throw new Exception("Refresh token geçerli değil.");
+
+        if (user.RefreshTokenExpiration < DateTime.Now)
+            throw new Exception("Refresh token'ın süresi dolmuş.");
+
+        TokenResponse token= await _jwtProvider.CreateTokenAsync(user);
+        return token;
     }
 
     public async Task<TokenResponse> LoginAsync(LoginCommand command, CancellationToken cancellationToken)
