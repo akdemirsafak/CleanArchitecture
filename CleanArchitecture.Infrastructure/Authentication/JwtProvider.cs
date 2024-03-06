@@ -17,7 +17,8 @@ public sealed class JwtProvider : IJwtProvider
     private readonly UserManager<AppUser> _userManager;
     private readonly JwtOptions _jwtOptions;
 
-    public JwtProvider(IOptions<JwtOptions> jwtOptions,
+    public JwtProvider(
+        IOptions<JwtOptions> jwtOptions,
         UserManager<AppUser> userManager)
     {
         _jwtOptions = jwtOptions.Value;
@@ -33,7 +34,7 @@ public sealed class JwtProvider : IJwtProvider
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        DateTime accessTokenExpiration = DateTime.UtcNow.AddHours(1);
+        DateTime accessTokenExpiration = DateTime.Now.AddHours(1);
 
         JwtSecurityToken jwtSecurityToken= new (
             _jwtOptions.Issuer,
@@ -53,7 +54,7 @@ public sealed class JwtProvider : IJwtProvider
         await _userManager.UpdateAsync(user);
         string token= new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
-        var tokenResponse=new TokenResponse(token,accessTokenExpiration,refreshToken,refreshTokenExpiration);
+        var tokenResponse=new TokenResponse(token, accessTokenExpiration, refreshToken, refreshTokenExpiration);
         return tokenResponse;
     }
 }

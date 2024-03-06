@@ -15,7 +15,6 @@ namespace CleanArchitecture.Webapi.OptionsSetup
         public void Configure(JwtOptions options)
         {
             _configuration.GetSection("Jwt").Bind(options);
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using CleanArchitecture.Application;
+using CleanArchitecture.Application.Abstraction;
 using CleanArchitecture.Application.Behaivors;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Domain.UnitOfWorks;
+using CleanArchitecture.Infrastructure.Authentication;
 using CleanArchitecture.Infrastructure.Options;
 using CleanArchitecture.Infrastructure.Services;
 using CleanArchitecture.Persistance.Context;
@@ -16,7 +18,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,9 +41,12 @@ builder.Services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>),typeof(ValidationBehavior<,>));
 
 builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<IMailService, MailService>();
+
 var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
@@ -64,9 +68,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllers()
-    .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
-
-
+    .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); 
+//Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
 
 
 builder.Services.AddEndpointsApiExplorer();
