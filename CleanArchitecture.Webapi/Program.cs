@@ -75,6 +75,17 @@ builder.Services.AddAutoMapper(typeof(CleanArchitecture.Persistance.PersistanceA
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+
+builder.Services.AddCors(_ => {
+    _.AddDefaultPolicy(policy =>
+            policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .SetIsOriginAllowed(policy => true)
+        );
+    });
+
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(CleanArchitecture.Presentation.PresentationAssemblyReference).Assembly); 
 //Mevcut uygulamada başka bir katmanda controller'ların olduğunu bildirdik.
@@ -120,6 +131,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 
 //app.UseMiddleware<ErrorMiddleware>();
 
