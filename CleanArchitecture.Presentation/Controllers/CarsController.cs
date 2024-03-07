@@ -1,6 +1,7 @@
 ﻿using CleanArchitecture.Application.Features.CarFeatures.Commands.CreateCar;
 using CleanArchitecture.Application.Features.CarFeatures.Queries.GetAll;
 using CleanArchitecture.Application.Features.CarFeatures.Queries.GetList;
+using CleanArchitecture.Infrastructure.Authorization;
 using CleanArchitecture.Presentation.Abstraction;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ public class CarsController : ApiController
     {
     }
     [HttpPost]
+    [RoleFilter("Admin")]
     public async Task<IActionResult> Create(CreateCarCommand request,CancellationToken cancellationToken)
     {
         var messageResponse=await _mediator.Send(request, cancellationToken);
